@@ -75,7 +75,7 @@ class LastPageState extends State<LastPage> {
             child: Center(
                   child: Text(
                     'Finish',
-                    style: TextStyle(fontSize: 20.0, color: Colors.orangeAccent),
+                    style: TextStyle(fontSize: 20.0, color: Colors.blueAccent),
                   )),
           )),
     );
@@ -155,12 +155,12 @@ class LastPageState extends State<LastPage> {
                               child: Container(
                                 height: 50.0,
                                 color: question.isSelected
-                                    ? Colors.orangeAccent.withAlpha(100)
+                                    ? Colors.blueAccent.withAlpha(100)
                                     : Colors.white,
                                 child: Row(
                                   children: <Widget>[
                                     Checkbox(
-                                        activeColor: Colors.orangeAccent,
+                                        activeColor: Colors.blueAccent,
                                         value: question.isSelected,
                                         onChanged: (bool value) {
 //                                          print(value);

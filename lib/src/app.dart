@@ -9,12 +9,81 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return MaterialApp(
-      theme: ThemeData(primaryColor: Colors.orangeAccent),
-      home: SplashScreen(),
+      title:'Survey App',
+      theme: ThemeData(primaryColor: Colors.blueAccent),
+      debugShowCheckedModeBanner: false,
+      home: SplashScreen()
     );
   }
 }
+// Create a Form Widget
+class MyCustomForm extends StatefulWidget {
+  @override
+  MyCustomFormState createState() {
+    return MyCustomFormState();
+  }
+}
+// Create a corresponding State class. This class will hold the data related to
+// the form.
+class MyCustomFormState extends State<MyCustomForm> {
+  // Create a global key that will uniquely identify the Form widget and allow
+  // us to validate the form
+  //
+  // Note: This is a GlobalKey<FormState>, not a GlobalKey<MyCustomFormState>!
+  final _formKey = GlobalKey<FormState>();
 
+  @override
+  Widget build(BuildContext context) {
+    // Build a Form widget using the _formKey we created above
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          new Text("Your name:"),
+          new TextFormField(
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please enter some text';
+              }
+            },
+          ),
+          new Text("Your Phone Number:"),
+          new TextFormField(
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please enter some text';
+              }
+            },
+          ),
+          new Text("Your Availability:"),
+          new TextFormField(
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please enter some text';
+              }
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: RaisedButton(
+              onPressed: () {
+                // Validate will return true if the form is valid, or false if
+                // the form is invalid.
+                if (_formKey.currentState.validate()) {
+                  // If the form is valid, we want to show a Snackbar
+                  Scaffold.of(context)
+                      .showSnackBar(SnackBar(content: Text('Processing Data')));
+                }
+              },
+              child: Text('Submit'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 class SplashScreen extends StatefulWidget {
   @override
   SplashScreenState createState() {
@@ -22,6 +91,7 @@ class SplashScreen extends StatefulWidget {
     return SplashScreenState();
   }
 }
+
 
 class SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
@@ -42,11 +112,9 @@ class SplashScreenState extends State<SplashScreen>
   bool isFriendly = false;
 
   List<SecondQuestion> usingCollection = [
-    SecondQuestion('daily', 'Daily'),
-    SecondQuestion('onceAWeek', 'Once a week'),
-    SecondQuestion('onceAMonth', 'Once a month'),
-    SecondQuestion('everyMoths', 'Every 2-3 months'),
-    SecondQuestion('lessThanYears', 'Less than 5 a years'),
+    SecondQuestion('yes', 'Yes'),
+    SecondQuestion('no', 'No'),
+  
   ];
 
   Animation<double> longPressAnimation;
@@ -60,15 +128,15 @@ class SplashScreenState extends State<SplashScreen>
     super.initState();
 
     _animateController = AnimationController(
-        duration: Duration(milliseconds: 2000), vsync: this);
+        duration: Duration(milliseconds: 500), vsync: this);
     _longPressController = AnimationController(
-        duration: Duration(milliseconds: 1000), vsync: this);
+        duration: Duration(milliseconds: 500), vsync: this);
     _secondStepController = AnimationController(
-        duration: Duration(milliseconds: 1000), vsync: this);
+        duration: Duration(milliseconds: 500), vsync: this);
     _thirdStepController = AnimationController(
-        duration: Duration(milliseconds: 1000), vsync: this);
+        duration: Duration(milliseconds: 500), vsync: this);
     _fourStepController = AnimationController(
-        duration: Duration(milliseconds: 1000), vsync: this);
+        duration: Duration(milliseconds: 500), vsync: this);
     longPressAnimation =
         Tween<double>(begin: 1.0, end: 2.0).animate(CurvedAnimation(
             parent: _longPressController,
@@ -208,7 +276,7 @@ class SplashScreenState extends State<SplashScreen>
                 child: Center(
                     child: Text(
                   curIndex < 3 ? 'Continue' : 'Finish',
-                  style: TextStyle(fontSize: 20.0, color: Colors.orangeAccent),
+                  style: TextStyle(fontSize: 16.0, color: Colors.blueAccent),
                 )),
               ),
             ))
@@ -231,8 +299,7 @@ class SplashScreenState extends State<SplashScreen>
             children: List.generate(4, (int index) {
               return Container(
                 decoration: BoxDecoration(
-//                    color: Colors.orangeAccent,
-                  color: index <= curIndex ? Colors.orangeAccent : Colors.grey,
+                  color: index <= curIndex ? Colors.blueAccent : Colors.grey,
                   borderRadius: BorderRadius.all(Radius.circular(2.0)),
                 ),
                 height: 10.0,
@@ -258,36 +325,83 @@ class SplashScreenState extends State<SplashScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Text('Question 1'),
+            Container(
+                        height:200.0,
+                        width: 200.0,
+                        decoration: new BoxDecoration(
+                          image: DecorationImage(
+                            image: new AssetImage(
+                                'images/auz.png'),
+                          fit: BoxFit.fill,
+                          ),
+                        
+                        ),
+                   ),
+            Text('Question 1',
+                    style: TextStyle(
+                        color: Colors.blueAccent,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0),),
             Container(
                 margin: EdgeInsets.only(top: 16.0),
-                child: Text('Overall, how would you rate our service?')),
+                child: Text('Are you an Australian citizen?',
+                    style: TextStyle(
+                        color: Colors.blueAccent,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0),)),
             Container(
-              margin: EdgeInsets.symmetric(vertical: 50.0),
-              child: Text(
-                overallStatus,
-                style: TextStyle(
-                    color: Colors.orangeAccent,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30.0),
-                textAlign: TextAlign.center,
-              ),
+              margin: EdgeInsets.symmetric(vertical: 16.0),
+              
             ),
             Expanded(
               child: Center(
-                child: Slider(
-                  value: overall,
-                  onChanged: (value) {
-                    setState(() {
-                      overall = value.round().toDouble();
-                      _getOverallStatus(overall);
-                    });
-                  },
-                  label: '${overall.toInt()}',
-                  divisions: 30,
-                  min: 1.0,
-                  max: 5.0,
-                ),
+                child: Container(
+                      height: 110.0,
+                      child: Card(
+                        child: Column(
+                          children: List.generate(usingCollection.length,
+                              (int index) {
+                            final using = usingCollection[index];
+                            return GestureDetector(
+                              onTapUp: (detail) {
+                                setState(() {
+                                  usingTimes = using.identifier;
+                                });
+                              },
+                              child: Container(
+                                height: 50.0,
+                                color: usingTimes == using.identifier
+                                    ? Colors.blueAccent.withAlpha(100)
+                                    : Colors.white,
+                                child: Column(
+                                  children: <Widget>[
+                                    Row(
+                                      children: <Widget>[
+                                        Radio(
+                                            activeColor: Colors.lightBlueAccent,
+                                            value: using.identifier,
+                                            groupValue: usingTimes,
+                                            onChanged: (String value) {
+                                              setState(() {
+                                                usingTimes = value;
+                                              });
+                                            }),
+                                        Text(using.displayContent)
+                                      ],
+                                    ),
+                                    Divider(
+                                      height: index < usingCollection.length
+                                          ? 1.0
+                                          : 0.0,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }),
+                        ),
+                      ),
+                    )
               ),
             )
           ],
@@ -308,14 +422,34 @@ class SplashScreenState extends State<SplashScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Text('Question 2'),
+                 Container(
+                        height:200.0,
+                        width: 200.0,
+                        decoration: new BoxDecoration(
+                          image: DecorationImage(
+                            image: new AssetImage(
+                                'images/jc.jpg'),
+                            fit: BoxFit.fill,
+                          ),
+                
+                        ),
+                   ),
+                Text('Question 2',
+                    style: TextStyle(
+                        color: Colors.blueAccent,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0),),
                 Container(
                     margin: EdgeInsets.only(top: 16.0),
-                    child: Text('How often do you typically use our service?')),
+                    child: Text('Have you been a Christian in your life?',
+                    style: TextStyle(
+                        color: Colors.blueAccent,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0),)),
                 Expanded(
                   child: Center(
                     child: Container(
-                      height: 258.0,
+                      height: 110.0,
                       child: Card(
                         child: Column(
                           children: List.generate(usingCollection.length,
@@ -330,14 +464,14 @@ class SplashScreenState extends State<SplashScreen>
                               child: Container(
                                 height: 50.0,
                                 color: usingTimes == using.identifier
-                                    ? Colors.orangeAccent.withAlpha(100)
+                                    ? Colors.blueAccent.withAlpha(100)
                                     : Colors.white,
                                 child: Column(
                                   children: <Widget>[
                                     Row(
                                       children: <Widget>[
                                         Radio(
-                                            activeColor: Colors.orangeAccent,
+                                            activeColor: Colors.lightBlueAccent,
                                             value: using.identifier,
                                             groupValue: usingTimes,
                                             onChanged: (String value) {
@@ -372,10 +506,13 @@ class SplashScreenState extends State<SplashScreen>
   }
 
   List<ThirdQuestion> thirdQuestionList = [
-    ThirdQuestion('Fairly cheaper price', false),
-    ThirdQuestion('Clear tracking system', false),
-    ThirdQuestion('Easy to use', false),
-    ThirdQuestion('Friendly customer service', false),
+    ThirdQuestion('Music', false),
+    ThirdQuestion('Travel', false),
+    ThirdQuestion('Video', false),
+    ThirdQuestion('Sports', false),
+    ThirdQuestion('Fellowship', false),
+    ThirdQuestion('Game', false),
+    ThirdQuestion('Reading', false),
   ];
   Widget _getThirdStep() {
     return Expanded(
@@ -389,14 +526,22 @@ class SplashScreenState extends State<SplashScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Text('Question 3'),
+                Text('Question 3',
+                    style: TextStyle(
+                        color: Colors.blueAccent,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0),),
                 Container(
                     margin: EdgeInsets.only(top: 16.0),
-                    child: Text('What do you like about our service?')),
+                    child: Text('What do you like to do in our fellowship activities?',
+                    style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0),)),
                 Expanded(
                   child: Center(
                     child: Container(
-                      height: 213.0,
+                      height: 400.0,
                       child: Card(
                         child: Column(
                           children: List.generate(thirdQuestionList.length,
@@ -415,12 +560,12 @@ class SplashScreenState extends State<SplashScreen>
                                   child: Container(
                                     height: 50.0,
                                     color: question.isSelected
-                                        ? Colors.orangeAccent.withAlpha(100)
+                                        ? Colors.blueAccent.withAlpha(100)
                                         : Colors.white,
                                     child: Row(
                                       children: <Widget>[
                                         Checkbox(
-                                            activeColor: Colors.orangeAccent,
+                                            activeColor: Colors.blueAccent,
                                             value: question.isSelected,
                                             onChanged: (bool value) {
 //                                          print(value);
@@ -453,164 +598,38 @@ class SplashScreenState extends State<SplashScreen>
       ),
     );
   }
+ 
 
   Widget _getFourStep() {
     return Expanded(
-      child: Container(
-        margin: EdgeInsets.only(top: 34.0),
-        child: Transform(
-          transform: new Matrix4.translationValues(
-              0.0, 50.0 * (1.0 - fourTranformAnimation.value), 0.0),
-          child: Opacity(
-            opacity: fourTranformAnimation.value,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Text('Question 4'),
-                Container(
-                    margin: EdgeInsets.only(top: 16.0),
-                    child: Text(
-                        'When you need help or has concerns related with our product, how satisfied are you with our customer support\'s performance?')),
-                Expanded(
-                  child: Center(
-                    child: Container(
-                      height: 213.0,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          Container(
-                            height: 150.0,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Column(
-                                  children: <Widget>[
-                                    GestureDetector(
-//                              onTapU
-//                        onLongPress: () {
-//                          _startLongPressAnimation();
-//                          },
-//                                onTapUp: (detail) {
-//                          print(detail);
-//                         _longPressController.reset();
-//                      },
-                                      onTapUp: (detail) {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        LastPage(
-                                                          statusType: 'Unhappy',
-                                                        )));
-                                      },
-                                      child: Transform.scale(
-                                          scale: longPressAnimation.value,
-                                          child: Hero(
-                                            tag: 'Unhappy',
-                                            child: Image.asset(
-                                              'images/angry.gif',
-                                              width: 50.0,
-                                              height: 50.0,
-                                            ),
-                                          )),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 8.0),
-                                      child: Text('Unhappy'),
-                                    )
-                                  ],
-                                ),
-                                Column(
-                                  children: <Widget>[
-                                    GestureDetector(
-//                              onTapU
-//                        onLongPress: () {
-//                          _startLongPressAnimation();
-//                          },
-//                                onTapUp: (detail) {
-//                          print(detail);
-//                         _longPressController.reset();
-//                      },
-                                      onTapUp: (detail) {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        LastPage(
-                                                          statusType: 'Neutral',
-                                                        )));
-                                      },
-                                      child: Hero(
-                                        tag: 'Neutral',
-                                        child: Transform.scale(
-                                            scale: longPressAnimation.value,
-                                            child: Image.asset(
-                                              'images/mmm.gif',
-                                              width: 50.0,
-                                              height: 50.0,
-                                            )),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 8.0),
-                                      child: Text('Neutral'),
-                                    )
-                                  ],
-                                ),
-                                Column(
-                                  children: <Widget>[
-                                    GestureDetector(
-//                              onTapU
-//                        onLongPress: () {
-//                          _startLongPressAnimation();
-//                          },
-//                                onTapUp: (detail) {
-//                          print(detail);
-//                         _longPressController.reset();
-//                      },
-                                      onTapUp: (detail) {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        LastPage(
-                                                          statusType:
-                                                              'Satisfied',
-                                                        )));
-                                      },
-                                      child: Transform.scale(
-                                          scale: longPressAnimation.value,
-                                          child: Hero(
-                                            tag: 'Satisfied',
-                                            child: Image.asset(
-                                              'images/hearteyes.gif',
-                                              width: 50.0,
-                                              height: 50.0,
-                                            ),
-                                          )),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 8.0),
-                                      child: Text('Satisfied'),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+      
+      child: ListView(
+        children: <Widget>[
+          new Container(
+                        height:50.0,
+                        width: 50.0,
+                        decoration: new BoxDecoration(
+                          image: DecorationImage(
+                            image: new AssetImage(
+                                'images/hearteyes.gif'),
+                            
+                          ),
+                
+                        ),
+                   ),
+          Text("Question 4: Are you interested?",
+                    style: TextStyle(
+                        color: Colors.blueAccent,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0),),
+          Container(
+            padding: EdgeInsets.only(top:100),
+            child: MyCustomForm(),
+          )
+        ],   
+    )
+      
+  );
   }
 
   _getOverallStatus(double overall) {
@@ -664,7 +683,7 @@ class AnimationBox extends StatelessWidget {
           ),
         ),
         radius = BorderRadiusTween(
-          begin: BorderRadius.circular(20.0),
+          begin: BorderRadius.circular(16.0),
           end: BorderRadius.circular(2.0),
         ).animate(
           CurvedAnimation(
@@ -780,7 +799,7 @@ class AnimationBox extends StatelessWidget {
                           decoration: BoxDecoration(
 //                    color: Colors.orangeAccent,
                             color:
-                                index == 0 ? Colors.orangeAccent : Colors.grey,
+                                index == 0 ? Colors.blueAccent : Colors.grey,
                             borderRadius:
                                 BorderRadius.all(Radius.circular(2.0)),
                           ),
@@ -791,35 +810,7 @@ class AnimationBox extends StatelessWidget {
                       }),
                     ),
                   ),
-                  Expanded(
-                    child: Container(
-//                color: Colors.blue,
-                      margin: EdgeInsets.only(top: 34.0),
-//                height: 10.0,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Text('Question 1'),
-                          Container(
-                              margin: EdgeInsets.only(top: 16.0),
-                              child: Text(
-                                  'Overall, how would you rate our service?')),
-                          Container(
-                            margin: EdgeInsets.symmetric(vertical: 50.0),
-                            child: Text(
-                              'Good',
-                              style: TextStyle(
-                                  color: Colors.orangeAccent,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 30.0),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  
                 ],
               ),
             ),
@@ -829,25 +820,31 @@ class AnimationBox extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  Expanded(
-                      child: Center(
-                          child: FlutterLogo(
-                            colors: Colors.orange,
-                    size: 100.0,
-                  ))),
+                  new Container(
+                        height:300.0,
+                        width: 200.0,
+                        decoration: new BoxDecoration(
+                          image: DecorationImage(
+                            image: new AssetImage(
+                                'images/df.png'),
+                            fit: BoxFit.fill,
+                          ),
+                
+                        ),
+                   ),
                   Text(
-                    'Your opinion in 3 minutes.',
+                    'A warm and friendly survey',
                     style: TextStyle(
-                        color: Colors.orangeAccent,
+                        color: Colors.blueAccent,
                         fontWeight: FontWeight.bold,
-                        fontSize: 30.0),
+                        fontSize: 16.0),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 16.0, bottom: 120.0),
+                    padding: const EdgeInsets.only(top: 16.0, bottom: 116.0),
                     child: Text(
                       'By answering this 3 minutes survey, you help us improve our service event better for you',
                       style: TextStyle(
-                        fontSize: 16.0,
+                        fontSize: 17.0,
                       ),
                     ),
                   )
@@ -867,14 +864,14 @@ class AnimationBox extends StatelessWidget {
                       child: Container(
                         height: height.value,
                         decoration: BoxDecoration(
-                            color: Colors.orangeAccent,
+                            color: Colors.blueAccent,
                             borderRadius: radius.value),
                         child: Center(
                           child: controller.status == AnimationStatus.dismissed
                               ? Text(
                                   'Take the survey',
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: 20.0),
+                                      color: Colors.white, fontSize: 16.0),
                                 )
                               : null,
                         ),
