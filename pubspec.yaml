@@ -25,12 +25,16 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  # Your other dev_dependencies here
+  flutter_launcher_icons: ^0.7.0
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
 flutter_icons:
-  android: "launcher_icon" 
   image_path: "icon/fishinglogo.jpeg"
+  android: true
+  ios: true
 
 # The following section is specific to Flutter.
 flutter:
